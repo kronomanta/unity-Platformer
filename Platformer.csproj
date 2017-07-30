@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Coin.cs" />
     <Compile Include="Assets\Scripts\DeathTrigger.cs" />
+    <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\PlatformFall.cs" />
     <Compile Include="Assets\Scripts\SimplePlatformController.cs" />
     <Compile Include="Assets\Scripts\SpawnCoin.cs" />

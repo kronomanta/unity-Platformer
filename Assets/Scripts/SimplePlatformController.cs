@@ -4,8 +4,6 @@ public class SimplePlatformController : MonoBehaviour {
 
     [HideInInspector]
     public bool IsFacingRight = true;
-    [HideInInspector]
-    public bool CanJump = false;
 
     public float MoveForce = 365f;
     public float MaxSpeed = 5f;
@@ -13,11 +11,16 @@ public class SimplePlatformController : MonoBehaviour {
     public Transform GroundCheck;
     public LayerMask GroundLayer;
 
+    public AudioClip[] JumpSounds;
+
     private bool _isGrounded;
     private Animator _anim;
     private Rigidbody2D _rb;
+    private AudioSource _audio;
+    private bool _startJump = false;
 
-	void Awake () {
+    void Awake () {
+        _audio = GetComponent<AudioSource>();
         _anim = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody2D>();
 	}
@@ -27,7 +30,7 @@ public class SimplePlatformController : MonoBehaviour {
 
         if (_isGrounded && Input.GetButtonDown("Jump"))
         {
-            CanJump = true;
+            _startJump = true;
         }
 	}
 
@@ -45,12 +48,22 @@ public class SimplePlatformController : MonoBehaviour {
         if ((h > 0 && !IsFacingRight) || (h < 0 && IsFacingRight))
             Flip();
 
-        if (CanJump)
+        if (_startJump)
         {
+            PlayJumpSound();
+
             _anim.SetTrigger("Jump");
             _rb.AddForce(new Vector2(0, JumpForce));
-            CanJump = false;
+            _startJump = false;
         }
+    }
+
+    void PlayJumpSound()
+    {
+        if (JumpSounds.Length == 0) return;
+
+        _audio.clip = JumpSounds[Random.Range(0, JumpSounds.Length)];
+        _audio.Play();
     }
 
     void Flip()
